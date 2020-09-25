@@ -6,6 +6,7 @@ export const SET_QUESTIONS = 'SET_QUESTIONS';
 export const SET_USER_ANSWERS = 'SET_USER_ANSWERS';
 export const SET_SCORE = 'SET_SCORE';
 export const SET_CURRENT_NUMBER = 'SET_CURRENT_NUMBER';
+export const SET_GAME_OVER = 'SET_GAME_OVER';
 
 // ACTION CREATORS
 export function setLoading(isLoading: boolean) {
@@ -28,5 +29,8 @@ export function setCurrentNumber(num: number) {
     return { type: SET_CURRENT_NUMBER, payload: num }
 }
 
+export function setGameOver(isOver: boolean) {
+    return { type: SET_GAME_OVER, payload: isOver }
+}
 
-//fetch -> siunti actiona (settini isLoading = true), 
+

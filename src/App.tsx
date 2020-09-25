@@ -1,14 +1,24 @@
-import React, { useState } from "react";
-import { useTheme } from "styled-components";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+// import { useTheme } from "styled-components";
 import { fetchQuizQuestions } from "./API";
-import {store} from './redux/store'
 
 //Styles
-import {GlobalStyle, Wrapper} from './App.styles'
+import { GlobalStyle, Wrapper } from "./App.styles";
 //Components
 import QuestionCard from "./components/QuestionCard";
 //Types
-import { Difficulty, QuestionState } from "./API";
+import { Difficulty } from "./API";
+import {
+  setCurrentNumber,
+  setGameOver,
+  setLoading,
+  setQuestions,
+  setScore,
+  setUserAnswers,
+} from "./redux/actions";
+
+import { GameState } from "./redux/types";
 
 export type AnswerObject = {
   question: string;
@@ -20,37 +30,43 @@ export type AnswerObject = {
 const TOTAL_QUESTIONS = 10;
 
 function App() {
-  const [loading, setLoading] = useState(false);
-  const [questions, setQuestions] = useState<QuestionState[]>([]);
-  const [userAnswers, setUserAnswers] = useState<AnswerObject[]>([]);
-  const [score, setScore] = useState(0);
-  const [currentNumber, setCurrentNumber] = useState(0);
-  const [gameOver, setGameOver] = useState(true);
+  const isLoading = useSelector((state: GameState) => state.loading);
+  const state = useSelector((state: GameState) => state);
+  const questions = useSelector((state: GameState) => state.questions);
+  const userAnswers = useSelector((state: GameState) => state.userAnswers);
+  const score = useSelector((state: GameState) => state.score);
+  const currentNumber = useSelector((state: GameState) => state.currentNumber);
+  const isGameOver = useSelector((state: GameState) => state.gameOver);
+  const dispatch = useDispatch();
+  // const [questions, setQuestions] = useState<QuestionState[]>([]);
+  // const [userAnswers, setUserAnswers] = useState<AnswerObject[]>([]);
+
+  //REDUX TEST
 
   const startQuiz = async () => {
-    setLoading(true);
-    setGameOver(false);
+    dispatch(setLoading(true));
+    dispatch(setGameOver(false));
 
     const newQuestions = await fetchQuizQuestions(
       TOTAL_QUESTIONS,
       Difficulty.Easy
     );
     //Cia galetu but reset game actionas
-    setQuestions(newQuestions);
-    setScore(0);
-    setUserAnswers([]);
-    setCurrentNumber(0);
-    setLoading(false);
+    dispatch(setQuestions(newQuestions));
+    dispatch(setScore(0));
+    dispatch(setUserAnswers([]));
+    dispatch(setCurrentNumber(0));
+    dispatch(setLoading(false));
   };
 
   const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!gameOver) {
+    if (!isGameOver) {
       e.preventDefault();
       //user answer
       const answer = e.currentTarget.value;
       const isCorrect = questions[currentNumber].correct_answer === answer;
       if (isCorrect) {
-        setScore((prev) => prev + 1);
+        dispatch(setScore(score + 1));
       }
       const answerObject = {
         question: questions[currentNumber].question,
@@ -58,52 +74,53 @@ function App() {
         isCorrect: isCorrect,
         correctAnswer: questions[currentNumber].correct_answer,
       };
-      setUserAnswers((prev) => [...prev, answerObject]);
+      dispatch(setUserAnswers([...userAnswers, answerObject]));
     }
   };
 
   const nextQuestion = () => {
-    setCurrentNumber(currentNumber + 1);
-    console.log(store.getState())
+    dispatch(setCurrentNumber(currentNumber + 1));
     if (currentNumber + 1 === TOTAL_QUESTIONS) {
-      setGameOver(true);
+      dispatch(setGameOver(true));
     } else {
     }
   };
 
   return (
     <>
-    <GlobalStyle />
-    <Wrapper>
-      <h1>REACT QUIZ</h1>
+      <GlobalStyle />
+      <Wrapper>
+        <h1>REACT QUIZ</h1>
 
-      {gameOver || userAnswers.length === TOTAL_QUESTIONS ? (
-        <button className="start" onClick={startQuiz}>
-          Start
-        </button>
-      ) : null}
+        {console.log(`This is the state: ${state} `)}
 
-      {!gameOver ? <p className="score">Score: {score}</p> : null}
-      {loading ? <p>Loading questions...</p> : null}
-      {!loading && !gameOver ? (
-        <QuestionCard
-          questionNum={currentNumber + 1}
-          totalQuestions={TOTAL_QUESTIONS}
-          question={questions[currentNumber].question}
-          answers={questions[currentNumber].answers}
-          userAnswer={userAnswers ? userAnswers[currentNumber] : undefined}
-          callback={checkAnswer}
-        />
-      ) : null}
-      {!gameOver &&
-      !loading &&
-      userAnswers.length === currentNumber + 1 &&
-      currentNumber !== TOTAL_QUESTIONS - 1 ? (
-        <button className="next" onClick={nextQuestion}>
-          Next Question
-        </button>
-      ) : null}
-    </Wrapper>
+        {isGameOver || userAnswers.length === TOTAL_QUESTIONS ? (
+          <button className="start" onClick={startQuiz}>
+            Start
+          </button>
+        ) : null}
+
+        {!isGameOver ? <p className="score">Score: {score}</p> : null}
+        {isLoading ? <p>Loading questions...</p> : null}
+        {!isLoading && !isGameOver ? (
+          <QuestionCard
+            questionNum={currentNumber + 1}
+            totalQuestions={TOTAL_QUESTIONS}
+            question={questions[currentNumber].question}
+            answers={questions[currentNumber].answers}
+            userAnswer={userAnswers ? userAnswers[currentNumber] : undefined}
+            callback={checkAnswer}
+          />
+        ) : null}
+        {!isGameOver &&
+        !isLoading &&
+        userAnswers.length === currentNumber + 1 &&
+        currentNumber !== TOTAL_QUESTIONS - 1 ? (
+          <button className="next" onClick={nextQuestion}>
+            Next Question
+          </button>
+        ) : null}
+      </Wrapper>
     </>
   );
 }

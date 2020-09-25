@@ -3,7 +3,8 @@ import {
     SET_QUESTIONS,
     SET_USER_ANSWERS,
     SET_SCORE,
-    SET_CURRENT_NUMBER
+    SET_CURRENT_NUMBER,
+    SET_GAME_OVER
 } from '../actions'
 
 
@@ -65,5 +66,12 @@ export interface setCurrentNumber {
     payload: number,
 }
 
+export interface setGameOver {
+    type: typeof SET_GAME_OVER,
+    payload: boolean,
+}
+
+
+
 export type QuestionState = Question & { answers: string[] };
-export type GameStateActionTypes = setLoading | setQuestions | setUserAnswers | setScore | setCurrentNumber;
+export type GameStateActionTypes = setLoading | setQuestions | setUserAnswers | setScore | setCurrentNumber | setGameOver;
