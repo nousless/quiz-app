@@ -10,12 +10,12 @@ const initialGameState: GameState ={
     gameOver: true,
 }
 
-export function gameReducer(state = initialGameState, action: GameStateActionTypes){
+export function gameReducer(state = initialGameState, action: GameStateActionTypes):GameState{
     switch(action.type){
         case SET_LOADING:{
             return{
                 ...initialGameState,
-                isLoading: action.payload
+                loading: action.payload
             } 
         }
         case SET_QUESTIONS:{
@@ -27,7 +27,7 @@ export function gameReducer(state = initialGameState, action: GameStateActionTyp
         case SET_USER_ANSWERS:{
             return{
                 ...initialGameState,
-                answers: action.payload
+                userAnswers: action.payload
             }
         }
         case SET_SCORE:{

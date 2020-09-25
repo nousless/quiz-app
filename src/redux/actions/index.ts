@@ -1,12 +1,13 @@
 import { AnswerObject, QuestionState } from '../types'
 
+//ACTION TYPES
 export const SET_LOADING = 'SET_LOADING';
 export const SET_QUESTIONS = 'SET_QUESTIONS';
 export const SET_USER_ANSWERS = 'SET_USER_ANSWERS';
 export const SET_SCORE = 'SET_SCORE';
 export const SET_CURRENT_NUMBER = 'SET_CURRENT_NUMBER';
 
-
+// ACTION CREATORS
 export function setLoading(isLoading: boolean) {
     return { type: SET_LOADING, payload: isLoading }
 }

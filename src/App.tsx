@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useTheme } from "styled-components";
 import { fetchQuizQuestions } from "./API";
+import {store} from './redux/store'
 
 //Styles
 import {GlobalStyle, Wrapper} from './App.styles'
@@ -34,7 +35,7 @@ function App() {
       TOTAL_QUESTIONS,
       Difficulty.Easy
     );
-
+    //Cia galetu but reset game actionas
     setQuestions(newQuestions);
     setScore(0);
     setUserAnswers([]);
@@ -63,7 +64,7 @@ function App() {
 
   const nextQuestion = () => {
     setCurrentNumber(currentNumber + 1);
-
+    console.log(store.getState())
     if (currentNumber + 1 === TOTAL_QUESTIONS) {
       setGameOver(true);
     } else {
