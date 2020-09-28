@@ -14,37 +14,37 @@ export function gameReducer(state = initialGameState, action: GameStateActionTyp
     switch (action.type) {
         case SET_LOADING: {
             return {
-                ...initialGameState,
+                ...state,
                 loading: action.payload
             }
         }
         case SET_QUESTIONS: {
             return {
-                ...initialGameState,
+                ...state,
                 questions: action.payload
             }
         }
         case SET_USER_ANSWERS: {
             return {
-                ...initialGameState,
+                ...state,
                 userAnswers: action.payload
             }
         }
         case SET_SCORE: {
             return {
-                ...initialGameState,
+                ...state,
                 score: action.payload
             }
         }
         case SET_CURRENT_NUMBER: {
             return {
-                ...initialGameState,
+                ...state,
                 currentNumber: action.payload
             }
         }
         case SET_GAME_OVER: {
             return {
-                ...initialGameState,
+                ...state,
                 gameOver: action.payload
             }
         }

@@ -1,14 +1,15 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+// import loader from './images/loader.svg'
 // import { useTheme } from "styled-components";
-import { fetchQuizQuestions } from "./API";
-
+import { fetchQuizQuestions, Difficulty } from "./API";
 //Styles
 import { GlobalStyle, Wrapper } from "./App.styles";
 //Components
 import QuestionCard from "./components/QuestionCard";
-//Types
-import { Difficulty } from "./API";
+//Redux
+import { useDispatch, useSelector } from "react-redux";
+import { AppState } from "./redux/reducers";
+
 import {
   setCurrentNumber,
   setGameOver,
@@ -17,8 +18,6 @@ import {
   setScore,
   setUserAnswers,
 } from "./redux/actions";
-
-import { GameState } from "./redux/types";
 
 export type AnswerObject = {
   question: string;
@@ -30,18 +29,15 @@ export type AnswerObject = {
 const TOTAL_QUESTIONS = 10;
 
 function App() {
-  const isLoading = useSelector((state: GameState) => state.loading);
-  const state = useSelector((state: GameState) => state);
-  const questions = useSelector((state: GameState) => state.questions);
-  const userAnswers = useSelector((state: GameState) => state.userAnswers);
-  const score = useSelector((state: GameState) => state.score);
-  const currentNumber = useSelector((state: GameState) => state.currentNumber);
-  const isGameOver = useSelector((state: GameState) => state.gameOver);
+  const isLoading = useSelector((state: AppState) => state.game.loading);
+  const questions = useSelector((state: AppState) => state.game.questions);
+  const userAnswers = useSelector((state: AppState) => state.game.userAnswers);
+  const score = useSelector((state: AppState) => state.game.score);
+  const currentNumber = useSelector(
+    (state: AppState) => state.game.currentNumber
+  );
+  const isGameOver = useSelector((state: AppState) => state.game.gameOver);
   const dispatch = useDispatch();
-  // const [questions, setQuestions] = useState<QuestionState[]>([]);
-  // const [userAnswers, setUserAnswers] = useState<AnswerObject[]>([]);
-
-  //REDUX TEST
 
   const startQuiz = async () => {
     dispatch(setLoading(true));
@@ -51,7 +47,7 @@ function App() {
       TOTAL_QUESTIONS,
       Difficulty.Easy
     );
-    //Cia galetu but reset game actionas
+
     dispatch(setQuestions(newQuestions));
     dispatch(setScore(0));
     dispatch(setUserAnswers([]));
@@ -92,8 +88,6 @@ function App() {
       <Wrapper>
         <h1>REACT QUIZ</h1>
 
-        {console.log(`This is the state: ${state} `)}
-
         {isGameOver || userAnswers.length === TOTAL_QUESTIONS ? (
           <button className="start" onClick={startQuiz}>
             Start
@@ -101,7 +95,9 @@ function App() {
         ) : null}
 
         {!isGameOver ? <p className="score">Score: {score}</p> : null}
-        {isLoading ? <p>Loading questions...</p> : null}
+        {isLoading ? (
+        <p>Loading...</p>
+        ) : null}
         {!isLoading && !isGameOver ? (
           <QuestionCard
             questionNum={currentNumber + 1}

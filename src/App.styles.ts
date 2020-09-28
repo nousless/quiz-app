@@ -10,7 +10,11 @@ export const GlobalStyle = createGlobalStyle`
 html{
     height: 100%;
 }
+:root{
+    width:100%;
+}
 body{
+    width:100%;
     color:white;
     background: url(${BackgroundImage});
     background-size:cover;
@@ -22,6 +26,7 @@ body{
 `
 
 export const Wrapper = styled.div`
+    width:100%;
     display:flex;
     flex-direction:column;
     align-items:center;
