@@ -1,10 +1,9 @@
 import {
     SET_LOADING,
-    SET_QUESTIONS,
     SET_USER_ANSWERS,
-    SET_SCORE,
-    SET_CURRENT_NUMBER,
-    SET_GAME_OVER
+    INCREMENT_SCORE,
+    INCREMENT_CURRENT_NUMBER,
+    SET_GAME_OVER, ADD_USER_ANSWER, START_NEW_GAME
 } from '../actions'
 
 
@@ -46,23 +45,22 @@ export interface setLoading {
     payload: boolean;
 }
 
-export interface setQuestions {
-    type: typeof SET_QUESTIONS,
-    payload: QuestionState[],
-}
-
 export interface setUserAnswers {
     type: typeof SET_USER_ANSWERS,
     payload: AnswerObject[],
 }
-
-export interface setScore {
-    type: typeof SET_SCORE,
-    payload: number,
+export interface addUserAnswer{
+    type: typeof ADD_USER_ANSWER,
+    payload: AnswerObject
 }
 
-export interface setCurrentNumber {
-    type: typeof SET_CURRENT_NUMBER,
+export interface incrementScore {
+    type: typeof INCREMENT_SCORE,
+    payload: null,
+}
+
+export interface incrementCurrentNumber {
+    type: typeof INCREMENT_CURRENT_NUMBER,
     payload: number,
 }
 
@@ -71,7 +69,14 @@ export interface setGameOver {
     payload: boolean,
 }
 
+export interface startNewGame {
+    type: typeof START_NEW_GAME,
+    payload: QuestionState[],
+}
+
 
 
 export type QuestionState = Question & { answers: string[] };
-export type GameStateActionTypes = setLoading | setQuestions | setUserAnswers | setScore | setCurrentNumber | setGameOver;
+export type GameStateActionTypes = 
+setLoading | setUserAnswers | addUserAnswer | incrementScore | 
+incrementCurrentNumber | setGameOver | startNewGame;

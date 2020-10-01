@@ -1,4 +1,4 @@
-import { SET_CURRENT_NUMBER, SET_GAME_OVER, SET_LOADING, SET_QUESTIONS, SET_SCORE, SET_USER_ANSWERS } from '../actions'
+import { ADD_USER_ANSWER, INCREMENT_CURRENT_NUMBER, SET_GAME_OVER, SET_LOADING, INCREMENT_SCORE, SET_USER_ANSWERS, START_NEW_GAME } from '../actions'
 import { GameStateActionTypes, GameState } from '../types'
 
 const initialGameState: GameState = {
@@ -18,34 +18,43 @@ export function gameReducer(state = initialGameState, action: GameStateActionTyp
                 loading: action.payload
             }
         }
-        case SET_QUESTIONS: {
-            return {
-                ...state,
-                questions: action.payload
-            }
-        }
         case SET_USER_ANSWERS: {
             return {
                 ...state,
                 userAnswers: action.payload
             }
         }
-        case SET_SCORE: {
-            return {
+        case ADD_USER_ANSWER:{
+            return{
                 ...state,
-                score: action.payload
+                userAnswers: [...state.userAnswers, action.payload]
             }
         }
-        case SET_CURRENT_NUMBER: {
+        case INCREMENT_SCORE: {
             return {
                 ...state,
-                currentNumber: action.payload
+                score: state.score +1
+            }
+        }
+        case INCREMENT_CURRENT_NUMBER: {
+            return {
+                ...state,
+                currentNumber: state.currentNumber + 1
             }
         }
         case SET_GAME_OVER: {
             return {
                 ...state,
                 gameOver: action.payload
+            }
+        }
+        case START_NEW_GAME: {
+            return{
+                ...state,
+                questions: action.payload,
+                score: 0,
+                userAnswers: [],
+                currentNumber: 0,
             }
         }
         default:

@@ -11,12 +11,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppState } from "./redux/reducers";
 
 import {
-  setCurrentNumber,
+  addUserAnswer,
+  incrementCurrentNumber,
   setGameOver,
   setLoading,
-  setQuestions,
-  setScore,
-  setUserAnswers,
+  incrementScore,
+  startNewGame,
 } from "./redux/actions";
 
 export type AnswerObject = {
@@ -48,10 +48,7 @@ function App() {
       Difficulty.Easy
     );
 
-    dispatch(setQuestions(newQuestions));
-    dispatch(setScore(0));
-    dispatch(setUserAnswers([]));
-    dispatch(setCurrentNumber(0));
+    dispatch(startNewGame(newQuestions));
     dispatch(setLoading(false));
   };
 
@@ -62,7 +59,7 @@ function App() {
       const answer = e.currentTarget.value;
       const isCorrect = questions[currentNumber].correct_answer === answer;
       if (isCorrect) {
-        dispatch(setScore(score + 1));
+        dispatch(incrementScore());
       }
       const answerObject = {
         question: questions[currentNumber].question,
@@ -70,15 +67,15 @@ function App() {
         isCorrect: isCorrect,
         correctAnswer: questions[currentNumber].correct_answer,
       };
-      dispatch(setUserAnswers([...userAnswers, answerObject]));
+      dispatch(addUserAnswer(answerObject));
     }
   };
 
   const nextQuestion = () => {
-    dispatch(setCurrentNumber(currentNumber + 1));
     if (currentNumber + 1 === TOTAL_QUESTIONS) {
       dispatch(setGameOver(true));
     } else {
+      dispatch(incrementCurrentNumber());
     }
   };
 
@@ -95,26 +92,24 @@ function App() {
         ) : null}
 
         {!isGameOver ? <p className="score">Score: {score}</p> : null}
-        {isLoading ? (
-        <p>Loading...</p>
-        ) : null}
+        {isLoading ? <p>Loading...</p> : null}
         {!isLoading && !isGameOver ? (
-          <QuestionCard
-            questionNum={currentNumber + 1}
-            totalQuestions={TOTAL_QUESTIONS}
-            question={questions[currentNumber].question}
-            answers={questions[currentNumber].answers}
-            userAnswer={userAnswers ? userAnswers[currentNumber] : undefined}
-            callback={checkAnswer}
-          />
-        ) : null}
-        {!isGameOver &&
-        !isLoading &&
-        userAnswers.length === currentNumber + 1 &&
-        currentNumber !== TOTAL_QUESTIONS - 1 ? (
-          <button className="next" onClick={nextQuestion}>
-            Next Question
-          </button>
+          <>
+            <QuestionCard
+              questionNum={currentNumber + 1}
+              totalQuestions={TOTAL_QUESTIONS}
+              question={questions[currentNumber].question}
+              answers={questions[currentNumber].answers}
+              userAnswer={userAnswers ? userAnswers[currentNumber] : undefined}
+              callback={checkAnswer}
+            />
+            {userAnswers.length === currentNumber + 1 &&
+            currentNumber !== TOTAL_QUESTIONS - 1 ? (
+              <button className="next" onClick={nextQuestion}>
+                Next Question
+              </button>
+            ) : null}
+          </>
         ) : null}
       </Wrapper>
     </>
