@@ -1,4 +1,4 @@
-import { AnswerObject, QuestionState } from '../types'
+import { Answer, QuestionState } from '../types'
 
 //ACTION TYPES
 export const SET_LOADING = 'SET_LOADING';
@@ -15,11 +15,11 @@ export function setLoading(isLoading: boolean) {
     return { type: SET_LOADING, payload: isLoading }
 }
 
-export function setUserAnswers(answers: AnswerObject[]) {
+export function setUserAnswers(answers: Answer[]) {
     return { type: SET_USER_ANSWERS, payload: answers }
 }
 
-export function addUserAnswer(answer: AnswerObject) {
+export function addUserAnswer(answer: Answer) {
     return { type: ADD_USER_ANSWER, payload: answer }
 }
 

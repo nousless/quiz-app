@@ -32,12 +32,15 @@ export interface GameState {
 
 export interface Question {
     category: string,
-    correct_answer: string,
+    correctAnswer: string,
     difficulty: string,
-    incorrect_answers: string[],
+    incorrectAnswers: string[],
     question: string,
     type: string,
 }
+export interface QuestionState extends Question {
+    answers: string[]
+};
 
 //ACTION TYPES
 
@@ -73,5 +76,5 @@ export interface setGameOver {
 
 
 
-export type QuestionState = Question & { answers: string[] };
-export type GameStateActionTypes = setLoading | setQuestions | setUserAnswers | setScore | setCurrentNumber | setGameOver;
+
+export type GameStateActions = setLoading | setQuestions | setUserAnswers | setScore | setCurrentNumber | setGameOver;

@@ -19,11 +19,11 @@ import {
   startNewGame,
 } from "./redux/actions";
 
-export type AnswerObject = {
+export type Answer = {
   question: string;
   userAnswer: string;
   isCorrect: boolean;
-  correctAnswer: string;
+  correct_answer: string;
 };
 
 const TOTAL_QUESTIONS = 10;
@@ -61,22 +61,18 @@ function App() {
       if (isCorrect) {
         dispatch(incrementScore());
       }
-      const answerObject = {
+      const answerContext = {
         question: questions[currentNumber].question,
         userAnswer: answer,
         isCorrect: isCorrect,
-        correctAnswer: questions[currentNumber].correct_answer,
+        correct_answer: questions[currentNumber].correct_answer,
       };
-      dispatch(addUserAnswer(answerObject));
+      dispatch(addUserAnswer(answerContext));
     }
   };
 
   const nextQuestion = () => {
-    if (currentNumber + 1 === TOTAL_QUESTIONS) {
-      dispatch(setGameOver(true));
-    } else {
-      dispatch(incrementCurrentNumber());
-    }
+    dispatch(incrementCurrentNumber());
   };
 
   return (
@@ -85,7 +81,7 @@ function App() {
       <Wrapper>
         <h1>REACT QUIZ</h1>
 
-        {isGameOver || userAnswers.length === TOTAL_QUESTIONS ? (
+        {isGameOver || userAnswers.length === TOTAL_QUESTIONS? (
           <button className="start" onClick={startQuiz}>
             Start
           </button>

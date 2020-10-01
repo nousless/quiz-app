@@ -1,12 +1,12 @@
 import React from "react";
-import {AnswerObject} from '../App'
+import {Answer} from '../App'
 import {Wrapper} from './QuestionCard.Styles'
 
-type Props = {
+interface Props  {
   question: string;
   answers: string[];
   callback: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  userAnswer: AnswerObject | undefined ;
+  userAnswer?: Answer ;
   questionNum: number;
   totalQuestions: number;
 };

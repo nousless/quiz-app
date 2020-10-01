@@ -1,5 +1,5 @@
 import { SET_CURRENT_NUMBER, SET_GAME_OVER, SET_LOADING, SET_QUESTIONS, SET_SCORE, SET_USER_ANSWERS } from '../actions'
-import { GameStateActionTypes, GameState } from '../types'
+import { GameStateActions, GameState } from '../types'
 
 const initialGameState: GameState = {
     loading: false,
@@ -10,7 +10,7 @@ const initialGameState: GameState = {
     gameOver: true,
 }
 
-export function gameReducer(state = initialGameState, action: GameStateActionTypes): GameState {
+export function gameReducer(state = initialGameState, action: GameStateActions): GameState {
     switch (action.type) {
         case SET_LOADING: {
             return {

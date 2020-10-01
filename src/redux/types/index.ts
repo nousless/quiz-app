@@ -13,17 +13,17 @@ export enum Difficulty {
     Hard = 'hard'
 };
 
-export interface AnswerObject {
+export interface Answer {
     question: string;
     userAnswer: string;
     isCorrect: boolean;
-    correctAnswer: string;
+    correct_answer: string;
 };
 
 export interface GameState {
     loading: boolean,
     questions: QuestionState[],
-    userAnswers: AnswerObject[],
+    userAnswers: Answer[],
     score: number,
     currentNumber: number,
     gameOver: boolean,
@@ -37,7 +37,9 @@ export interface Question {
     question: string,
     type: string,
 }
-
+export interface QuestionState extends Question {
+     answers: string[] 
+    };
 //ACTION TYPES
 
 export interface setLoading {
@@ -47,11 +49,11 @@ export interface setLoading {
 
 export interface setUserAnswers {
     type: typeof SET_USER_ANSWERS,
-    payload: AnswerObject[],
+    payload: Answer[],
 }
-export interface addUserAnswer{
+export interface addUserAnswer {
     type: typeof ADD_USER_ANSWER,
-    payload: AnswerObject
+    payload: Answer
 }
 
 export interface incrementScore {
@@ -74,9 +76,6 @@ export interface startNewGame {
     payload: QuestionState[],
 }
 
-
-
-export type QuestionState = Question & { answers: string[] };
-export type GameStateActionTypes = 
-setLoading | setUserAnswers | addUserAnswer | incrementScore | 
-incrementCurrentNumber | setGameOver | startNewGame;
+export type GameStateActions =
+    setLoading | setUserAnswers | addUserAnswer | incrementScore |
+    incrementCurrentNumber | setGameOver | startNewGame;
