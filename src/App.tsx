@@ -52,11 +52,9 @@ function App() {
     dispatch(setLoading(false));
   };
 
-  const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const checkAnswer = (answer:string) => {
     if (!isGameOver) {
-      e.preventDefault();
-      //user answer
-      const answer = e.currentTarget.value;
+      
       const isCorrect = questions[currentNumber].correct_answer === answer;
       if (isCorrect) {
         dispatch(incrementScore());

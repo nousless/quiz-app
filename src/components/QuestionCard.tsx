@@ -5,12 +5,16 @@ import {Wrapper} from './QuestionCard.Styles'
 type Props = {
   question: string;
   answers: string[];
-  callback: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  callback: (answer:string) => void;
   userAnswer?: Answer;
   questionNum: number;
   totalQuestions: number;
 };
+const handleClick=(e:React.MouseEvent<HTMLButtonElement>) => {
+  e.preventDefault();
+  return e.currentTarget.value;
 
+} 
 
 const QuestionCard: React.FC<Props> = ({
   question,
@@ -28,8 +32,8 @@ const QuestionCard: React.FC<Props> = ({
     <p dangerouslySetInnerHTML={{ __html: question }}></p>
     <div>
       {answers.map((answer) => (
-        <div key={answer}>
-          <button className="answerButton" disabled={!!userAnswer} value={answer} onClick={callback}>
+        <div key={answer}> 
+          <button className="answerButton" disabled={!!userAnswer} value={answer} onClick={(e) => callback(handleClick(e))}>
             <span dangerouslySetInnerHTML={{ __html: answer }}></span>
           </button>
         </div>
