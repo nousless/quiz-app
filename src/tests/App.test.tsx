@@ -8,6 +8,7 @@ import App from "../App";
 import QuestionCard from "../components/QuestionCard";
 import { Difficulty } from "../redux/types";
 import { fetchQuizQuestions } from "../API";
+import {RESULTS} from './constants.ts'
 
 describe("App", () => {
   let wrapper: HTMLElement;
@@ -22,37 +23,28 @@ describe("App", () => {
   });
 
   describe("API", () => {
-    
-    beforeEach(() => {
-        fetchMock.resetMocks()
-      })
-
-    const testAmount = 1;
+    const testAmount = 2;
     const testDifficulty = Difficulty.Easy;
-
-    it("should return the same result everytime", async () => {
-        fetchMock.mockResponseOnce(
-            JSON.stringify({
-              result: [
-                { category: "Entertainment: Video Games" },
-                { type: "multiple" },
-                { difficulty: "easy" },
-                { incorrect_answers: ["Mario", "Zelda", "Pit"] },
-                {
-                  question:
-                    "What is the name of the main protagonist in Legend of Zelda",
-                },
-                { correct_answer: "Link" },
-              ],
-            })
-          );
-      fetchQuizQuestions(testAmount, testDifficulty).then(res => {
-        console.log(res)
-        expect(res).toEqual('12345')
-      })
-      
+  
+    beforeEach(() => {
+      fetch.resetMocks();
+    });
+    
+    it("fetches successfully", async () => {
+      const desiredResult = fetch.mockResponseOnce(
+        JSON.stringify(RESULTS)
+      );
+  
+      const result = await fetchQuizQuestions(testAmount, testDifficulty);
+      //Galima butu matchint ir tiksliau, bet tiesiog norim patikrint ar grazina
+      expect(result).toBeTruthy();
+      expect(fetch).toHaveBeenCalledTimes(1);
+      expect(fetch).toHaveBeenCalledWith(
+        `https://opentdb.com/api.php?amount=${testAmount}&difficulty=${testDifficulty}&type=multiple`
+      );
     });
   });
+  
 
   describe("QuestionCard", () => {
     const testQuestion = `This is a bucket`;
