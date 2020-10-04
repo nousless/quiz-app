@@ -11,6 +11,7 @@ export interface Questions {
 }
 export const fetchQuizQuestions = async (amount: number, difficulty: Difficulty) => {
     const endpoint = `https://opentdb.com/api.php?amount=${amount}&difficulty=${difficulty}&type=multiple`;
+
     const data: Questions = await (await fetch(endpoint)).json();
     return data.results.map((question: Question) => (
         {
@@ -21,4 +22,5 @@ export const fetchQuizQuestions = async (amount: number, difficulty: Difficulty)
             ]),
         }
     ))
+
 }
