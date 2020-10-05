@@ -12,29 +12,29 @@ import { Difficulty, fetchQuizQuestions } from "../API";
 describe("App", () => {
 
 
-  // test("sucessful game flow", async () => {
-  //   render(
-  //     <Provider store={store}>
-  //       <App />
-  //     </Provider>
-  //   );
-  //   fetch.mockResponseOnce(JSON.stringify(RESULTS));
+  test("sucessful game flow", async () => {
+    render(
+      <Provider store={store}>
+        <App />
+      </Provider>
+    );
+    fetch.mockResponseOnce(JSON.stringify(RESULTS));
 
-  //   const startButton = screen.getByText("Start");
+    const startButton = screen.getByText("Start");
 
-  //   //Fetch test
-  //   expect(startButton).toBeVisible();
-  //   fireEvent.click(startButton);
-  //   expect(fetch).toHaveBeenCalledTimes(1);
+    //Fetch test
+    expect(startButton).toBeVisible();
+    fireEvent.click(startButton);
+    expect(fetch).toHaveBeenCalledTimes(1);
 
-  //   //Loading state
-  //   expect(screen.getByText("Loading...")).toBeVisible();
-  //   expect(screen.getByText(/Score:/i)).toBeVisible();
+    //Loading state
+    expect(screen.getByText("Loading...")).toBeVisible();
+    expect(screen.getByText(/Score:/i)).toBeVisible();
 
-  //   //Loaded state
-  //   await waitFor(() => screen.getByTestId("questionCard"));
-  //   expect(screen.getByTestId("questionCard")).toBeVisible();
-  // });
+    //Loaded state
+    await waitFor(() => screen.getByTestId("questionCard"));
+    expect(screen.getByTestId("questionCard")).toBeVisible();
+  });
 
 
 
