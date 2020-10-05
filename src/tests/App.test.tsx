@@ -1,41 +1,39 @@
-
-
-import { render, fireEvent, screen } from "@testing-library/react";
+import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import fetch from "jest-fetch-mock";
 import React from "react";
-import { Provider} from "react-redux";
+import { Provider } from "react-redux";
 import { store } from "../redux/store";
 import App from "../App";
 import { RESULTS } from "./stubs";
 
-
-
 describe("App", () => {
-
   // before each test, set initial store state
-  beforeEach(() => {
-  
+  const init = () => {
     render(
       <Provider store={store}>
         <App />
       </Provider>
     );
-  });
-  
-  
-  test("sucessful game start flow", () => {
-    //test startQuiz
+    }
+
+  test("sucessful game start flow", async () => {
+    init()
     fetch.mockResponseOnce(JSON.stringify(RESULTS));
-    let game = store.getState().game;
+
 
     const startButton = screen.getByText("Start");
-    expect(startButton).toBeVisible();
    
-    
+    expect(startButton).toBeVisible();
     fireEvent.click(startButton);
-    game = store.getState().game;
-    expect(game.gameOver).toEqual(false);
-    expect(game.loading).toEqual(true);
+    expect(fetch).toHaveBeenCalledTimes(1);
+   
+   
+    expect(screen.getByText("Loading...")).toBeVisible();
+    expect(screen.getByText(/Score:/i)).toBeVisible();
+    
+    await waitFor(() => screen.getByTestId('questionCard'))
+
+
   });
 });
 

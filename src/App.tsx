@@ -47,6 +47,7 @@ function App() {
       TOTAL_QUESTIONS,
       Difficulty.Easy
     );
+    console.log(newQuestions)
 
     dispatch(startNewGame(newQuestions));
     dispatch(setLoading(false));
@@ -90,6 +91,7 @@ function App() {
         {!isLoading && !isGameOver ? (
           <>
             <QuestionCard
+              data-testid="questionCard" 
               questionNum={currentNumber + 1}
               totalQuestions={TOTAL_QUESTIONS}
               question={questions[currentNumber].question}
