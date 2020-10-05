@@ -12,7 +12,6 @@ import { RESULTS } from "./stubs";
 
 
 describe("App", () => {
-  let wrapper: HTMLElement;
 
   // before each test, set initial store state
   beforeEach(() => {
