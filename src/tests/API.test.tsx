@@ -1,6 +1,6 @@
 import fetch from "jest-fetch-mock";
-import { fetchQuizQuestions, Difficulty, Questions } from "../API";
-import {RESULTS} from './constants.ts'
+import { fetchQuizQuestions, Difficulty } from "../API";
+import {RESULTS} from './stubs'
 describe("API", () => {
   const testAmount = 2;
   const testDifficulty = Difficulty.Easy;

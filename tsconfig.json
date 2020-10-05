@@ -20,6 +20,9 @@
     "jsx": "react",
   },
   "include": [
-    "src"
+    "src",  
+  ],
+  "files":[
+    "node_modules/@testing-library/jest-dom/extend-expect.d.ts"
   ]
 }
