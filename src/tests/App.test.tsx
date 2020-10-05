@@ -4,14 +4,11 @@ import { render, fireEvent, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import fetch from "jest-fetch-mock";
 import React from "react";
-import { Provider, useDispatch, useSelector } from "react-redux";
+import { Provider} from "react-redux";
 import { store } from "../redux/store";
 import App from "../App";
-import QuestionCard from "../components/QuestionCard";
-import { Difficulty } from "../redux/types";
-import { fetchQuizQuestions } from "../API";
 import { RESULTS } from "./stubs";
-import { AppState } from "../redux/reducers";
+
 
 
 describe("App", () => {
