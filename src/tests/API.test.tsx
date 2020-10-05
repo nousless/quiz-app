@@ -10,7 +10,7 @@ describe("API", () => {
   });
 
   it("fetches successfully", async () => {
-    const desiredResult = fetch.mockResponseOnce(
+    fetch.mockResponseOnce(
       JSON.stringify(RESULTS)
     );
 
