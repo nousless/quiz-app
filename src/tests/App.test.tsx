@@ -5,35 +5,63 @@ import { Provider } from "react-redux";
 import { store } from "../redux/store";
 import App from "../App";
 import { RESULTS } from "./stubs";
+import { createStore } from "redux";
+import { rootReducer } from "../redux/reducers";
+import { Difficulty, fetchQuizQuestions } from "../API";
 
 describe("App", () => {
-  // before each test, set initial store state
-  const init = () => {
+
+
+  // test("sucessful game flow", async () => {
+  //   render(
+  //     <Provider store={store}>
+  //       <App />
+  //     </Provider>
+  //   );
+  //   fetch.mockResponseOnce(JSON.stringify(RESULTS));
+
+  //   const startButton = screen.getByText("Start");
+
+  //   //Fetch test
+  //   expect(startButton).toBeVisible();
+  //   fireEvent.click(startButton);
+  //   expect(fetch).toHaveBeenCalledTimes(1);
+
+  //   //Loading state
+  //   expect(screen.getByText("Loading...")).toBeVisible();
+  //   expect(screen.getByText(/Score:/i)).toBeVisible();
+
+  //   //Loaded state
+  //   await waitFor(() => screen.getByTestId("questionCard"));
+  //   expect(screen.getByTestId("questionCard")).toBeVisible();
+  // });
+
+
+
+  test("question card use", async () => {
+    
+    fetch.mockResponseOnce(JSON.stringify(RESULTS));
+    const result = await fetchQuizQuestions(2, Difficulty.Easy);
+    const newStore = createStore(
+      rootReducer,
+      {
+        game: {
+          loading: false,
+          questions: result,
+          userAnswers: [],
+          score: 0,
+          currentNumber: 0,
+          gameOver: false,
+        },
+      },
+      undefined
+    );
+
     render(
-      <Provider store={store}>
+      <Provider store={newStore}>
         <App />
       </Provider>
     );
-  };
-
-  test("sucessful game flow", async () => {
-    init();
-    fetch.mockResponseOnce(JSON.stringify(RESULTS));
-
-    const startButton = screen.getByText("Start");
-
-    //Fetch test
-    expect(startButton).toBeVisible();
-    fireEvent.click(startButton);
-    expect(fetch).toHaveBeenCalledTimes(1);
-
-    //Loading state
-    expect(screen.getByText("Loading...")).toBeVisible();
-    expect(screen.getByText(/Score:/i)).toBeVisible();
-
-    //Loaded state
-    await waitFor(() => screen.getByTestId("questionCard"));
-    expect(screen.getByTestId("questionCard")).toBeVisible();
 
     //Selecting the correct answer
     fireEvent.click(screen.getByText(/Mars/i));
@@ -50,14 +78,6 @@ describe("App", () => {
     //Select wrong answer (and reach the end of the available questions)
     fireEvent.click(screen.getByText(/Undertale/i));
     expect(scoreDisplay.innerHTML).toEqual("Score: 1");
-    expect(startButton).toBeVisible();
-
+    expect(screen.getByText(/Start/i)).toBeVisible();
   });
 });
-
-//Render the entirety of the initial gameState
-//StartButton, H1
-//On StartButtonClick, the questions should be fetched
-//when they are, we check if we get the expected data/result
-//render the question card with fetched data
-//QuestionCard

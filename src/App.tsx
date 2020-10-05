@@ -79,7 +79,7 @@ function App() {
       <Wrapper>
         <h1>REACT QUIZ</h1>
 
-        {isGameOver || userAnswers.length === TOTAL_QUESTIONS? (
+        {isGameOver || userAnswers.length === questions.length? (
           <button className="start" onClick={startQuiz}>
             Start
           </button>
@@ -91,14 +91,14 @@ function App() {
           <>
             <QuestionCard
               questionNum={currentNumber + 1}
-              totalQuestions={TOTAL_QUESTIONS}
+              totalQuestions={questions.length}
               question={questions[currentNumber].question}
               answers={questions[currentNumber].answers}
               userAnswer={userAnswers ? userAnswers[currentNumber] : undefined}
               callback={checkAnswer}
             />
             {userAnswers.length === currentNumber + 1 &&
-            currentNumber !== TOTAL_QUESTIONS - 1 ? (
+            currentNumber !== questions.length - 1 ? (
               <button className="next" onClick={nextQuestion} data-testid="nextQuestion">
                 Next Question
               </button>
