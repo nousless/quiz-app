@@ -6,6 +6,7 @@ import { fetchQuizQuestions, Difficulty } from "./API";
 import { GlobalStyle, Wrapper } from "./App.styles";
 //Components
 import QuestionCard from "./components/QuestionCard";
+import Loader from "react-loader-spinner";
 //Redux
 import { useDispatch, useSelector } from "react-redux";
 import { AppState } from "./redux/reducers";
@@ -52,9 +53,8 @@ function App() {
     dispatch(setLoading(false));
   };
 
-  const checkAnswer = (answer:string) => {
+  const checkAnswer = (answer: string) => {
     if (!isGameOver) {
-      
       const isCorrect = questions[currentNumber].correct_answer === answer;
       if (isCorrect) {
         dispatch(incrementScore());
@@ -79,14 +79,19 @@ function App() {
       <Wrapper>
         <h1>REACT QUIZ</h1>
 
-        {isGameOver || userAnswers.length === questions.length? (
+        {isGameOver || userAnswers.length === questions.length ? (
           <button className="start" onClick={startQuiz}>
             Start
           </button>
         ) : null}
 
         {!isGameOver ? <p className="score">Score: {score}</p> : null}
-        {isLoading ? <p>Loading...</p> : null}
+        {isLoading ? (
+          <>
+            <Loader type="ThreeDots" color="white" height={60} width={60} />
+            <p>Loading...</p>
+          </>
+        ) : null}
         {!isLoading && !isGameOver ? (
           <>
             <QuestionCard
@@ -99,7 +104,11 @@ function App() {
             />
             {userAnswers.length === currentNumber + 1 &&
             currentNumber !== questions.length - 1 ? (
-              <button className="next" onClick={nextQuestion} data-testid="nextQuestion">
+              <button
+                className="next"
+                onClick={nextQuestion}
+                data-testid="nextQuestion"
+              >
                 Next Question
               </button>
             ) : null}
