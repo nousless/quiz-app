@@ -47,7 +47,6 @@ function App() {
       TOTAL_QUESTIONS,
       Difficulty.Easy
     );
-    console.log(newQuestions)
 
     dispatch(startNewGame(newQuestions));
     dispatch(setLoading(false));
@@ -91,7 +90,6 @@ function App() {
         {!isLoading && !isGameOver ? (
           <>
             <QuestionCard
-              data-testid="questionCard" 
               questionNum={currentNumber + 1}
               totalQuestions={TOTAL_QUESTIONS}
               question={questions[currentNumber].question}
@@ -101,7 +99,7 @@ function App() {
             />
             {userAnswers.length === currentNumber + 1 &&
             currentNumber !== TOTAL_QUESTIONS - 1 ? (
-              <button className="next" onClick={nextQuestion}>
+              <button className="next" onClick={nextQuestion} data-testid="nextQuestion">
                 Next Question
               </button>
             ) : null}

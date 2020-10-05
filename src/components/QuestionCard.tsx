@@ -24,7 +24,7 @@ const QuestionCard: React.FC<Props> = ({
   questionNum,
   totalQuestions,
 }) => (
-  <Wrapper>
+  <Wrapper data-testid="questionCard" >
     <p className="number">
       Question: {questionNum} / {totalQuestions}
     </p>
@@ -34,6 +34,7 @@ const QuestionCard: React.FC<Props> = ({
       {answers.map((answer) => (
         <div key={answer}>
           <button
+            data-testid="answerButton"
             className="answerButton"
             disabled={!!userAnswer}
             value={answer}

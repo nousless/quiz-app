@@ -14,25 +14,43 @@ describe("App", () => {
         <App />
       </Provider>
     );
-    }
+  };
 
-  test("sucessful game start flow", async () => {
-    init()
+  test("sucessful game flow", async () => {
+    init();
     fetch.mockResponseOnce(JSON.stringify(RESULTS));
 
-
     const startButton = screen.getByText("Start");
-   
+
+    //Fetch test
     expect(startButton).toBeVisible();
     fireEvent.click(startButton);
     expect(fetch).toHaveBeenCalledTimes(1);
-   
-   
+
+    //Loading state
     expect(screen.getByText("Loading...")).toBeVisible();
     expect(screen.getByText(/Score:/i)).toBeVisible();
-    
-    await waitFor(() => screen.getByTestId('questionCard'))
 
+    //Loaded state
+    await waitFor(() => screen.getByTestId("questionCard"));
+    expect(screen.getByTestId("questionCard")).toBeVisible();
+
+    //Selecting the correct answer
+    fireEvent.click(screen.getByText(/Mars/i));
+    expect(screen.getByTestId("nextQuestion")).toBeVisible();
+
+    //Check score increase
+    const scoreDisplay = screen.getByText(/Score/i);
+    expect(scoreDisplay.innerHTML).toEqual("Score: 1");
+
+    //Go to next question
+    fireEvent.click(screen.getByTestId("nextQuestion"));
+    expect(screen.getByText(/Undertale/i)).toBeVisible();
+
+    //Select wrong answer (and reach the end of the available questions)
+    fireEvent.click(screen.getByText(/Undertale/i));
+    expect(scoreDisplay.innerHTML).toEqual("Score: 1");
+    expect(startButton).toBeVisible();
 
   });
 });
