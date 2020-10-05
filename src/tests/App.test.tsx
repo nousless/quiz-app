@@ -1,7 +1,6 @@
 
 
 import { render, fireEvent, screen } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect";
 import fetch from "jest-fetch-mock";
 import React from "react";
 import { Provider} from "react-redux";
