@@ -14,13 +14,12 @@
     "forceConsistentCasingInFileNames": true,
     "module": "esnext",
     "moduleResolution": "node",
-    "skipDefaultLibCheck": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
   },
   "include": [
-    "src",  
+    "src"
   ]
 }

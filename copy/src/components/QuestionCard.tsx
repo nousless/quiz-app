@@ -1,20 +1,16 @@
 import React from "react";
-import { Answer } from "../App";
-import { Wrapper } from "./QuestionCard.Styles";
+import {Answer} from '../App'
+import {Wrapper} from './QuestionCard.Styles'
 
-type Props = {
+interface Props  {
   question: string;
   answers: string[];
-  callback: (answer: string) => void;
-  userAnswer?: Answer;
+  callback: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  userAnswer?: Answer ;
   questionNum: number;
   totalQuestions: number;
 };
 
-const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-  e.preventDefault();
-  return e.currentTarget.value;
-};
 
 const QuestionCard: React.FC<Props> = ({
   question,
@@ -24,22 +20,16 @@ const QuestionCard: React.FC<Props> = ({
   questionNum,
   totalQuestions,
 }) => (
-  <Wrapper data-testid="questionCard" >
+  <Wrapper>
     <p className="number">
       Question: {questionNum} / {totalQuestions}
     </p>
-
+    
     <p dangerouslySetInnerHTML={{ __html: question }}></p>
     <div>
       {answers.map((answer) => (
         <div key={answer}>
-          <button
-            data-testid="answerButton"
-            className="answerButton"
-            disabled={!!userAnswer}
-            value={answer}
-            onClick={(e) => callback(handleClick(e))}
-          >
+          <button className="answerButton" disabled={!!userAnswer} value={answer} onClick={callback}>
             <span dangerouslySetInnerHTML={{ __html: answer }}></span>
           </button>
         </div>

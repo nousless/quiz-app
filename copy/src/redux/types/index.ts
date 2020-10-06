@@ -1,9 +1,10 @@
 import {
     SET_LOADING,
+    SET_QUESTIONS,
     SET_USER_ANSWERS,
-    INCREMENT_SCORE,
-    INCREMENT_CURRENT_NUMBER,
-    SET_GAME_OVER, ADD_USER_ANSWER, START_NEW_GAME
+    SET_SCORE,
+    SET_CURRENT_NUMBER,
+    SET_GAME_OVER
 } from '../actions'
 
 
@@ -13,17 +14,17 @@ export enum Difficulty {
     Hard = 'hard'
 };
 
-export interface Answer {
+export interface AnswerObject {
     question: string;
     userAnswer: string;
     isCorrect: boolean;
-    correct_answer: string;
+    correctAnswer: string;
 };
 
 export interface GameState {
     loading: boolean,
     questions: QuestionState[],
-    userAnswers: Answer[],
+    userAnswers: AnswerObject[],
     score: number,
     currentNumber: number,
     gameOver: boolean,
@@ -31,15 +32,16 @@ export interface GameState {
 
 export interface Question {
     category: string,
-    correct_answer: string,
+    correctAnswer: string,
     difficulty: string,
-    incorrect_answers: string[],
+    incorrectAnswers: string[],
     question: string,
     type: string,
 }
 export interface QuestionState extends Question {
-     answers: string[] 
-    };
+    answers: string[]
+};
+
 //ACTION TYPES
 
 export interface setLoading {
@@ -47,22 +49,23 @@ export interface setLoading {
     payload: boolean;
 }
 
+export interface setQuestions {
+    type: typeof SET_QUESTIONS,
+    payload: QuestionState[],
+}
+
 export interface setUserAnswers {
     type: typeof SET_USER_ANSWERS,
-    payload: Answer[],
-}
-export interface addUserAnswer {
-    type: typeof ADD_USER_ANSWER,
-    payload: Answer
+    payload: AnswerObject[],
 }
 
-export interface incrementScore {
-    type: typeof INCREMENT_SCORE,
-    payload: null,
+export interface setScore {
+    type: typeof SET_SCORE,
+    payload: number,
 }
 
-export interface incrementCurrentNumber {
-    type: typeof INCREMENT_CURRENT_NUMBER,
+export interface setCurrentNumber {
+    type: typeof SET_CURRENT_NUMBER,
     payload: number,
 }
 
@@ -71,11 +74,7 @@ export interface setGameOver {
     payload: boolean,
 }
 
-export interface startNewGame {
-    type: typeof START_NEW_GAME,
-    payload: QuestionState[],
-}
 
-export type GameStateActions =
-    setLoading | setUserAnswers | addUserAnswer | incrementScore |
-    incrementCurrentNumber | setGameOver | startNewGame;
+
+
+export type GameStateActions = setLoading | setQuestions | setUserAnswers | setScore | setCurrentNumber | setGameOver;

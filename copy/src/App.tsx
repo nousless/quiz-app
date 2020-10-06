@@ -6,25 +6,24 @@ import { fetchQuizQuestions, Difficulty } from "./API";
 import { GlobalStyle, Wrapper } from "./App.styles";
 //Components
 import QuestionCard from "./components/QuestionCard";
-import Loader from "react-loader-spinner";
 //Redux
 import { useDispatch, useSelector } from "react-redux";
 import { AppState } from "./redux/reducers";
 
 import {
-  addUserAnswer,
-  incrementCurrentNumber,
+  setCurrentNumber,
   setGameOver,
   setLoading,
-  incrementScore,
-  startNewGame,
+  setQuestions,
+  setScore,
+  setUserAnswers,
 } from "./redux/actions";
 
 export type Answer = {
   question: string;
   userAnswer: string;
   isCorrect: boolean;
-  correct_answer: string;
+  correctAnswer: string;
 };
 
 const TOTAL_QUESTIONS = 10;
@@ -49,28 +48,39 @@ function App() {
       Difficulty.Easy
     );
 
-    dispatch(startNewGame(newQuestions));
+    dispatch(setQuestions(newQuestions));
+    dispatch(setScore(0));
+    dispatch(setUserAnswers([]));
+    dispatch(setCurrentNumber(0));
     dispatch(setLoading(false));
   };
 
-  const checkAnswer = (answer: string) => {
+  const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (!isGameOver) {
-      const isCorrect = questions[currentNumber].correct_answer === answer;
+      e.preventDefault();
+      //user answer
+      const answer = e.currentTarget.value;
+      const isCorrect = questions[currentNumber].correctAnswer === answer;
       if (isCorrect) {
-        dispatch(incrementScore());
+        dispatch(setScore(score + 1));
       }
       const answerContext = {
         question: questions[currentNumber].question,
         userAnswer: answer,
         isCorrect: isCorrect,
-        correct_answer: questions[currentNumber].correct_answer,
+        correctAnswer: questions[currentNumber].correctAnswer,
       };
-      dispatch(addUserAnswer(answerContext));
+      dispatch(setUserAnswers([...userAnswers, answerContext]));
     }
   };
 
   const nextQuestion = () => {
-    dispatch(incrementCurrentNumber());
+    
+    if (userAnswers.length === TOTAL_QUESTIONS) {
+      dispatch(setGameOver(true));
+    } else {
+      dispatch(setCurrentNumber(currentNumber + 1));
+    }
   };
 
   return (
@@ -79,7 +89,7 @@ function App() {
       <Wrapper>
         <h1>REACT QUIZ</h1>
 
-        {isGameOver || userAnswers.length === questions.length ? (
+        {isGameOver  ? (
           <button className="start" onClick={startQuiz}>
             Start
           </button>
@@ -87,32 +97,25 @@ function App() {
 
         {!isGameOver ? <p className="score">Score: {score}</p> : null}
         {isLoading ? (
-          <>
-            <Loader type="ThreeDots" color="white" height={60} width={60} />
-            <p>Loading...</p>
-          </>
+        <p>Loading...</p>
         ) : null}
         {!isLoading && !isGameOver ? (
-          <>
-            <QuestionCard
-              questionNum={currentNumber + 1}
-              totalQuestions={questions.length}
-              question={questions[currentNumber].question}
-              answers={questions[currentNumber].answers}
-              userAnswer={userAnswers ? userAnswers[currentNumber] : undefined}
-              callback={checkAnswer}
-            />
-            {userAnswers.length === currentNumber + 1 &&
-            currentNumber !== questions.length - 1 ? (
-              <button
-                className="next"
-                onClick={nextQuestion}
-                data-testid="nextQuestion"
-              >
-                Next Question
-              </button>
-            ) : null}
-          </>
+          <QuestionCard
+            questionNum={currentNumber + 1}
+            totalQuestions={TOTAL_QUESTIONS}
+            question={questions[currentNumber].question}
+            answers={questions[currentNumber].answers}
+            userAnswer={userAnswers ? userAnswers[currentNumber] : undefined}
+            callback={checkAnswer}
+          />
+        ) : null}
+        {!isGameOver &&
+        !isLoading &&
+        userAnswers.length === currentNumber + 1 &&
+        currentNumber !== TOTAL_QUESTIONS - 1 ? (
+          <button className="next" onClick={nextQuestion}>
+            Next Question
+          </button>
         ) : null}
       </Wrapper>
     </>
